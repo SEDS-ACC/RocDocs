@@ -1,0 +1,17 @@
+/target/
+**/*.rs.bk
+/dist/
+
+book/
+
+*.swp
+*.swo
+
+.vscode/
+*.code-workspace
+
+.idea/
+*.iml
+
+.DS_Store
+Thumbs.db

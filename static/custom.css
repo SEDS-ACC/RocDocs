@@ -1,0 +1,61 @@
+/* * RocDocs Custom Stylesheet
+ * Uses responsive, relative units (rem/em) and mdBook's native CSS variables.
+ */
+
+/* =========================================
+   1. Version Switcher (Navbar Dropdown)
+   ========================================= */
+#version-select {
+    margin-left: 1rem;
+    background: var(--bg);
+    color: var(--fg);
+    border: 0.1rem solid var(--theme-popup-border);
+    border-radius: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 1.2rem;
+    align-self: center;
+    outline: none;
+    cursor: pointer;
+    /* Smooth transition for hover states */
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Make it react when the user hovers over it, matching the other navbar icons */
+#version-select:hover,
+#version-select:focus {
+    border-color: var(--icons-hover);
+    background: var(--theme-hover);
+}
+
+/* =========================================
+   2. Mermaid Diagram Containers
+   ========================================= */
+/* Ensures large avionics/logic diagrams don't break the page width on mobile */
+.mermaid {
+    background-color: var(--bg);
+    border: 0.1rem solid var(--theme-popup-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+}
+
+/* =========================================
+   3. General UI Enhancements
+   ========================================= */
+/* Slimmer, modern scrollbars for the sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 0.4rem;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--theme-popup-border);
+    border-radius: 0.2rem;
+}
+
+/* Soften the edges of code blocks to match the modern UI */
+pre {
+    border-radius: 0.4rem;
+}

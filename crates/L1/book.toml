@@ -1,0 +1,10 @@
+[book]
+authors = ["Jonathan Kurtz"]
+language = "en"
+src = "src"
+title = "RocDocs: L1"
+
+[output.html]
+theme = "../../theme"
+additional-css = ["../../static/custom.css"]
+additional-js = ["../../static/version-switch.js"]

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=./v1/">
+    <title>Loading RocDocs...</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1f2326; /* Matches the Coal theme background */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            color: #a1b0b8;
+        }
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 0.3rem solid rgba(255, 255, 255, 0.1);
+            border-top-color: #4db8ff; /* Matches the mdBook blue accent */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .fallback {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+        a { color: #4db8ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="spinner"></div>
+    <div class="fallback">
+        Routing to L1 docs... <a href="./v1/">Click here</a> if you are not redirected shortly.
+    </div>
+    
+    <script>
+        // JS replace prevents the redirect from clogging up the browser's "Back" button history
+        window.location.replace("./v1/");
+    </script>
+</body>
+</html>
