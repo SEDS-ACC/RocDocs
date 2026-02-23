@@ -22,6 +22,7 @@ async fn main() {
         ("crates/L1", "v1"),
         ("crates/L2", "v2"),
         ("crates/L3", "v3"),
+        ("crates/Team", "team"),
     ];
 
     for (src, dest) in books {
