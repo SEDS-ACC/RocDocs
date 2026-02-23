@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (path.includes('/v1/')) selector.value = '/v1/';
     if (path.includes('/v2/')) selector.value = '/v2/';
     if (path.includes('/v3/')) selector.value = '/v3/';
+    if (path.includes('/team/')) selector.value = '/team/';
 
     // Navigate when a new option is clicked
     selector.addEventListener('change', (e) => {
