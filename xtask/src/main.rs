@@ -1,63 +1,58 @@
 use mdbook_driver::MDBook;
-use mdbook_html::HtmlHandlebars;
-use std::env;
-use std::fs;
-use std::path::PathBuf;
+use std::{env, fs, path::{Path, PathBuf}, os::unix::fs::symlink};
+
+const INDEX_HTML: &str = include_str!("../../index.html");
 
 #[tokio::main]
 async fn main() {
-    let xtask_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let root = xtask_dir.parent().unwrap().to_path_buf();
+    let args: Vec<String> = env::args().collect();
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().unwrap().to_path_buf();
     let dist = root.join("dist");
 
-    println!("Building Workspace (Native 0.5.2)...");
+    build_workspace(&root, &dist);
 
-    if dist.exists() {
-        fs::remove_dir_all(&dist).unwrap();
+    if args.contains(&"serve".to_string()) {
+        println!("Serving RocDocs at http://localhost:8000");
+        warp::serve(warp::fs::dir(dist)).run(([127, 0, 0, 1], 8000)).await;
     }
-    fs::create_dir_all(&dist).unwrap();
+}
 
-    let books = /* iterate over crates */
-        vec![
+fn build_workspace(root: &Path, dist: &Path) {
+    let books = vec![
         ("crates/L1", "L1"),
         ("crates/L2", "L2"),
         ("crates/L3", "L3"),
-        ("crates/Team", "team"),
+        ("crates/Team", "Team")
     ];
 
-    for (src, dest) in books {
-        let book_dir = root.join(src);
-        if !book_dir.exists() { continue; }
+    if dist.exists() { fs::remove_dir_all(dist).ok(); }
+    fs::create_dir_all(dist).ok();
 
-        println!("Compiling {}...", src);
-        let mut md = MDBook::load(&book_dir)
-            .expect(&format!("Failed to load mdBook at {:?}", book_dir));
-
-        md.config.build.build_dir = dist.join(dest);
-        md.with_renderer(HtmlHandlebars::new());
-        md.build().expect("Build failed");
-    }
-
-    fs::copy(root.join("index.html"), dist.join("index.html")).ok();
-    let static_dir = root.join("static");
-    let dist_static = dist.join("static");
-    if static_dir.exists() {
-        fs::create_dir_all(&dist_static).unwrap();
-        for entry in fs::read_dir(static_dir).unwrap().filter_map(|e| e.ok()) {
-            if entry.path().is_file() {
-                fs::copy(entry.path(), dist_static.join(entry.file_name())).ok();
-            }
-        }
-    }
-    println!("Workspace built successfully.");
-
-    // ---- The Native Rust Server ----
-    let args: Vec<String> = env::args().collect();
-    if args.contains(&"serve".to_string()) {
-        println!("Serving RocDocs natively at http://localhost:8000");
-        println!("Press Ctrl+C to stop.");
+    for (crate_path, dest_name) in &books {
+        println!("Building {}...", dest_name);
+        let crate_root = root.join(crate_path);
         
-        let route = warp::fs::dir(dist);
-        warp::serve(route).run(([127, 0, 0, 1], 8000)).await;
+        // 1. Create temporary symlinks to the root assets
+        let tmp_static = crate_root.join("static");
+        let tmp_theme = crate_root.join("theme");
+
+        // Clean up any stale links first
+        let _ = fs::remove_file(&tmp_static);
+        let _ = fs::remove_file(&tmp_theme);
+
+        symlink(root.join("static"), &tmp_static).ok();
+        symlink(root.join("theme"), &tmp_theme).ok();
+
+        // 2. Build the book
+        let mut md = MDBook::load(&crate_root).expect("Failed to load book");
+        md.config.build.build_dir = dist.join(dest_name);
+        md.build().expect("Build failed");
+
+        // 3. Remove symlinks immediately - your source tree is clean again!
+        let _ = fs::remove_file(&tmp_static);
+        let _ = fs::remove_file(&tmp_theme);
     }
+
+    fs::write(dist.join("index.html"), INDEX_HTML).ok();
+    println!("Workspace build complete.");
 }
