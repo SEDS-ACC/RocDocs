@@ -1,4 +1,4 @@
-- [ ] Update API endpoints from v1 to L1 etc.
+- [x] Update API endpoints from v1 to L1 etc.
 - [ ] Make Sections dynamic
     - [ ] `theme/index.hbs`
     - [ ] `xtask/src/main.rs`

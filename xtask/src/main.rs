@@ -19,9 +19,9 @@ async fn main() {
 
     let books = /* iterate over crates */
         vec![
-        ("crates/L1", "v1"),
-        ("crates/L2", "v2"),
-        ("crates/L3", "v3"),
+        ("crates/L1", "L1"),
+        ("crates/L2", "L2"),
+        ("crates/L3", "L3"),
         ("crates/Team", "team"),
     ];
 
