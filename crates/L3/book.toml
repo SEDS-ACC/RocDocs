@@ -5,6 +5,6 @@ src = "src"
 title = "RocDocs: L3"
 
 [output.html]
-theme = "../../theme"
-additional-css = ["../../static/custom.css"]
-additional-js = ["../../static/version-switch.js"]
+theme = "theme"
+additional-css = ["static/custom.css"]
+additional-js = ["static/version-switch.js"]

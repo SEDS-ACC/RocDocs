@@ -4,6 +4,6 @@ authors = ["Jonathan Kurtz"]
 language = "en"
 
 [output.html]
-theme = "../../theme"
-additional-css = ["../../static/custom.css"]
-additional-js = ["../../static/version-switch.js"]
+theme = "theme"
+additional-css = ["static/custom.css"]
+additional-js = ["static/version-switch.js"]
